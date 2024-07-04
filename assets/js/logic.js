@@ -12,8 +12,11 @@ function handleSearch(event) {
 
     let cityName = $("#cityName").val();
     getWeatherInfo(cityName);
-    $('#cityList').append(`<button type="button" class="btn cityButton" style="background-color:#DFDFDF;">${cityName}</button>`);
-    $(".cityButton").click(handleCityButton);
+    if(!searchedCities.includes(cityName)){
+        $('#cityList').append(`<button type="button" class="btn cityButton" style="background-color:#DFDFDF;">${cityName}</button>`);
+        $(".cityButton").click(handleCityButton);
+    }
+
 
     $("#cityName").val('');
 
@@ -25,13 +28,8 @@ function getWeatherInfo(cityName) {
 
     fetch(apiUrl)
     .then(function(response){
-        if(response.ok) {
-            return response.json();
-        }
-        else {
-            console.log(":'(((");
-        }
-    }) 
+        return response.json();
+    })
     .then(function(result) {
         let coords = [result[0].lat, result[0].lon]
         return coords;
@@ -45,13 +43,7 @@ function getWeatherInfo(cityName) {
         return fetch(newApiUrl);
     })
     .then(function(response) {
-        if(response.ok) {
-            console.log(":D")
-            return response.json();
-        }
-        else{
-            console.log("NO");
-        }
+        return response.json();
     })
     .then(function(result) {
         console.log(result);
@@ -62,6 +54,10 @@ function getWeatherInfo(cityName) {
 
         renderWeatherInfo();
 
+    })
+    .catch((error) =>{
+        console.log("Error!");
+        renderErrorMessage();
     })
     /*
     .then(function (result){
@@ -92,6 +88,11 @@ function getWeatherInfo(cityName) {
     })
         */
 
+}
+
+function renderErrorMessage(){
+    $("#currentDisplay").html('<h3>Whoops...something went wrong!<h3>');
+    $("#futureDisplay").html('');
 }
 
 function handleCityButton(event){
