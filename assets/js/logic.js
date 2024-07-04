@@ -1,8 +1,10 @@
 const APIKey = "50ed25e94a50cae769760c988183a9a5";
 
 // http://api.openweathermap.org/geo/1.0/direct?q={city name}&limit=5&appid={API key};
+let weatherData = JSON.parse(localStorage.getItem("weatherData"));
+
+let cumulativeData = [];
 let weatherArray = [];
-let dailyArray = [];
 
 function handleSearch(event) {
 
@@ -10,6 +12,8 @@ function handleSearch(event) {
 
     let cityName = $("#cityName").val();
     getWeatherInfo(cityName);
+    $('#cityList').append(`<button type="button" class="btn cityButton" style="background-color:#DFDFDF;">${cityName}</button>`);
+    $(".cityButton").click(handleCityButton);
 
 }
 
@@ -50,6 +54,9 @@ function getWeatherInfo(cityName) {
         console.log(result);
         weatherArray = result;
 
+        cumulativeData.push(weatherArray);
+        localStorage.setItem("weatherData", JSON.stringify(cumulativeData));
+
         renderWeatherInfo();
 
     })
@@ -84,6 +91,20 @@ function getWeatherInfo(cityName) {
 
 }
 
+function handleCityButton(event){
+    weatherArray = cumulativeData.find((element) => element["city"].name == event.target.innerHTML);
+    renderWeatherInfo();
+    
+}
+
+function renderButtons() {
+    for(const obj of cumulativeData) {
+        $('#cityList').append(`<button type="button" class="btn cityButton">${obj["city"].name}</button>`);
+        $(".cityButton").click(handleCityButton);
+    }
+
+}
+
 function pickIcon(condition) {
     if(condition == 800) {
         return '<i class="fa-regular fa-sun"></i>';
@@ -113,8 +134,9 @@ function pickIcon(condition) {
 
 
 function renderWeatherInfo() {
-    $('#currentDisplay').append(`
-        <h3>${weatherArray["city"].name} (${dayjs.unix(weatherArray["list"][0].dt).format("MM/D/YYYY")})</h3>
+    $('#currentDisplay').html(`
+        <h3>${weatherArray["city"].name} (${dayjs.unix(weatherArray["list"][0].dt).format("MM/D/YYYY")}) ${pickIcon(weatherArray["list"][0]["weather"][0].id)}
+</h3>
         <ul class="list-unstyled fs-5">
             <li>Temp: ${weatherArray["list"][0]["main"].temp}</li>
             <li>Wind: ${weatherArray["list"][0]["wind"].speed} MPH</li>
@@ -125,6 +147,7 @@ function renderWeatherInfo() {
     );
    // let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
    // console.log(breakpoint);
+   $('#futureDisplay').html('');
 
     for(let i = 7; i<weatherArray["list"].length;i+=8) {
         console.log(weatherArray["list"][i]["weather"][0].id);
@@ -147,6 +170,13 @@ function renderWeatherInfo() {
 
 }
 
+
 $(document).ready(function(){
     $("#searchButton").click(handleSearch);
+
+    if(weatherData !== null) {
+        cumulativeData = weatherData;
+    }
+
+    renderButtons();
 });
