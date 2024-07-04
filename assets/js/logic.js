@@ -15,6 +15,9 @@ function handleSearch(event) {
     $('#cityList').append(`<button type="button" class="btn cityButton" style="background-color:#DFDFDF;">${cityName}</button>`);
     $(".cityButton").click(handleCityButton);
 
+    $("#cityName").val('');
+
+
 }
 
 function getWeatherInfo(cityName) {
@@ -99,7 +102,7 @@ function handleCityButton(event){
 
 function renderButtons() {
     for(const city of searchedCities) {
-        $('#cityList').append(`<button type="button" class="btn cityButton">${city}</button>`);
+        $('#cityList').append(`<button type="button" class="btn cityButton" style="background-color:#DFDFDF;">${city}</button>`);
         $(".cityButton").click(handleCityButton);
     }
 
