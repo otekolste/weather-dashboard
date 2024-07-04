@@ -36,7 +36,6 @@ function getWeatherInfo(cityName) {
 
     })
     .then(function(result) {
-        console.log(result);
         let lat = result[0];
         let lon = result[1];
         const newApiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${APIKey}`;
@@ -46,7 +45,6 @@ function getWeatherInfo(cityName) {
         return response.json();
     })
     .then(function(result) {
-        console.log(result);
         weatherArray = result;
 
         if(!searchedCities.includes(weatherArray["city"].name)) {
@@ -62,50 +60,9 @@ function getWeatherInfo(cityName) {
         console.log("Error!");
         renderErrorMessage();
     })
-    /*
-    .then(function (result){
-        console.log(result);
-      //  weatherArray = result;
-       // renderWeatherInfo();
-       let groupedArray = [];
-
-       let breakpoint = result["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
-     //  console.log(breakpoint);
-        let weatherObj = {
-            temp:0,
-            wind:0,
-            humidity:0,
-
-        }
-
-        for(let i = 0; i<breakpoint;i++) {
-
-        }
-
-
-
-
-
-
-
-    })
-        */
 
 }
 
-function getAverageVals() {
-    let temp = 0;
-    let hum = 0;
-    let wind = 0;
-
-    let avgValArray = [];
-
-    let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
-    console.log(breakpoint);
-
-
-
-}
 
 function renderErrorMessage(){
     $("#currentDisplay").html('<h3>Whoops...something went wrong!<h3>');
@@ -114,7 +71,6 @@ function renderErrorMessage(){
 
 function handleCityButton(event){
     getWeatherInfo(event.target.innerHTML);
-    renderWeatherInfo();
     
 }
 
@@ -156,32 +112,31 @@ function pickIcon(condition) {
 
 function renderWeatherInfo() {
     $('#currentDisplay').html(`
-        <h3>${weatherArray["city"].name} (${dayjs.unix(weatherArray["list"][0].dt).format("MM/D/YYYY")}) ${pickIcon(weatherArray["list"][0]["weather"][0].id)}
+        <h3 class="mt-2">${weatherArray["city"].name} (${dayjs.unix(weatherArray["list"][0].dt).format("MM/D/YYYY")}) ${pickIcon(weatherArray["list"][0]["weather"][0].id)}
 </h3>
         <ul class="list-unstyled fs-5">
-            <li>Temp: ${weatherArray["list"][0]["main"].temp}</li>
-            <li>Wind: ${weatherArray["list"][0]["wind"].speed} MPH</li>
-            <li>Humidity: ${weatherArray["list"][0]["main"].humidity}%</li>
+            <li class="my-2">Temp: ${weatherArray["list"][0]["main"].temp}</li>
+            <li class="my-2">Wind: ${weatherArray["list"][0]["wind"].speed} MPH</li>
+            <li class="my-2">Humidity: ${weatherArray["list"][0]["main"].humidity}%</li>
 
         </ul>
         `
     );
-   // let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
-   // console.log(breakpoint);
+//    let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
+
    $('#futureDisplay').html('');
 
-    for(let i = 7; i<weatherArray["list"].length;i+=8) {
+    for(let i = 7; i< weatherArray["list"].length; i+=9) {
         console.log(weatherArray["list"][i]["weather"][0].id);
-      //  console.log(weatherArray["list"][i]);
         $('#futureDisplay').append(`
-            <div class="card col text-light text-center" style="background-color: #16223F">
+            <div class="card col-md-3 col-sm-6 text-light text-center" style="background-color: #16223F">
                 <div class="card-body">
                     <h4>${dayjs.unix(weatherArray["list"][i].dt).format("MM/D/YYYY")}</h4>
                     ${pickIcon(weatherArray["list"][i]["weather"][0].id)}
                     <ul class="list-unstyled fs-5">
-                        <li>Temp: ${weatherArray["list"][i]["main"].temp}</li>
-                        <li>Wind: ${weatherArray["list"][i]["wind"].speed} MPH</li>
-                        <li>Humidity: ${weatherArray["list"][i]["main"].humidity}%</li>
+                        <li class="my-2">Temp: ${weatherArray["list"][i]["main"].temp}</li>
+                        <li class="my-2">Wind: ${weatherArray["list"][i]["wind"].speed} MPH</li>
+                        <li class="my-2">Humidity: ${weatherArray["list"][i]["main"].humidity}%</li>
                     </ul>
                 </div> 
             </div>
