@@ -1,9 +1,9 @@
 const APIKey = "50ed25e94a50cae769760c988183a9a5";
 
 // http://api.openweathermap.org/geo/1.0/direct?q={city name}&limit=5&appid={API key};
-let weatherData = JSON.parse(localStorage.getItem("weatherData"));
+let citiesList = JSON.parse(localStorage.getItem("citiesList"));
 
-let cumulativeData = [];
+let searchedCities = [];
 let weatherArray = [];
 
 function handleSearch(event) {
@@ -54,8 +54,8 @@ function getWeatherInfo(cityName) {
         console.log(result);
         weatherArray = result;
 
-        cumulativeData.push(weatherArray);
-        localStorage.setItem("weatherData", JSON.stringify(cumulativeData));
+        searchedCities.push(weatherArray["city"].name);
+        localStorage.setItem("citiesList", JSON.stringify(searchedCities));
 
         renderWeatherInfo();
 
@@ -92,14 +92,14 @@ function getWeatherInfo(cityName) {
 }
 
 function handleCityButton(event){
-    weatherArray = cumulativeData.find((element) => element["city"].name == event.target.innerHTML);
+    getWeatherInfo(event.target.innerHTML);
     renderWeatherInfo();
     
 }
 
 function renderButtons() {
-    for(const obj of cumulativeData) {
-        $('#cityList').append(`<button type="button" class="btn cityButton">${obj["city"].name}</button>`);
+    for(const city of searchedCities) {
+        $('#cityList').append(`<button type="button" class="btn cityButton">${city}</button>`);
         $(".cityButton").click(handleCityButton);
     }
 
@@ -174,8 +174,8 @@ function renderWeatherInfo() {
 $(document).ready(function(){
     $("#searchButton").click(handleSearch);
 
-    if(weatherData !== null) {
-        cumulativeData = weatherData;
+    if( citiesList !== null) {
+        searchedCities = citiesList;
     }
 
     renderButtons();
