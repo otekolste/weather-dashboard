@@ -49,8 +49,11 @@ function getWeatherInfo(cityName) {
         console.log(result);
         weatherArray = result;
 
-        searchedCities.push(weatherArray["city"].name);
-        localStorage.setItem("citiesList", JSON.stringify(searchedCities));
+        if(!searchedCities.includes(weatherArray["city"].name)) {
+            searchedCities.push(weatherArray["city"].name);
+            localStorage.setItem("citiesList", JSON.stringify(searchedCities));
+        }
+
 
         renderWeatherInfo();
 
@@ -87,6 +90,20 @@ function getWeatherInfo(cityName) {
 
     })
         */
+
+}
+
+function getAverageVals() {
+    let temp = 0;
+    let hum = 0;
+    let wind = 0;
+
+    let avgValArray = [];
+
+    let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
+    console.log(breakpoint);
+
+
 
 }
 
