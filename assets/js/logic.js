@@ -27,7 +27,7 @@ function handleSearch(event) {
 }
 
 function getWeatherInfo(cityName) {
-    const apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${APIKey}`;
+    const apiUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${APIKey}`;
 
     fetch(apiUrl)
     .then(function(response){
