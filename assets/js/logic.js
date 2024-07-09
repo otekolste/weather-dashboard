@@ -8,6 +8,7 @@ let citiesList = JSON.parse(localStorage.getItem("citiesList"));
 let searchedCities = [];
 let weatherArray = [];
 
+
 function handleSearch(event) {
 
     event.preventDefault();
@@ -51,14 +52,13 @@ function getWeatherInfo(cityName) {
     .then(function(response) {
         weatherArray = response;
      //   console.log(weatherArray);
+        renderWeatherInfo();
+
 
         if(!searchedCities.includes(weatherArray[0].name)) {
             searchedCities.push(weatherArray[0].name);
             localStorage.setItem("citiesList", JSON.stringify(searchedCities));
         }
-
-
-        renderWeatherInfo();
 
     })
     .catch((error) =>{
@@ -171,15 +171,14 @@ function renderWeatherInfo() {
     );
 
     let breakpoint = weatherArray[1]["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
-//    console.log(breakpoint);
     $('#futureDisplay').html('');
-    console.log(weatherArray);
     for(let i = 0; i<5;i++) {
         console.log(getAverageTemp(breakpoint,breakpoint+8));
         $('#futureDisplay').append(`
             <div class="card mx-1 col-md-2 col-sm-6 text-light text-center" style="background-color: #16223F">
                 <div class="card-body">
                     <h4>${weatherArray[1]["list"][breakpoint].dt_txt.substring(0,11)}</h4>
+                    ${pickIcon(weatherArray[1]["list"][i]["weather"][0].id)}
                     <ul class="list-unstyled fs-5">
                         <li class="my-2">Temp: ${getAverageTemp(breakpoint, breakpoint+8)}</li>
                         <li class="my-2">Wind: ${getAverageWind(breakpoint, breakpoint+8)} MPH</li>
@@ -191,28 +190,6 @@ function renderWeatherInfo() {
 
 
     }
-//    let breakpoint = weatherArray["list"].findIndex((element) => element.dt_txt.substring(11) == "00:00:00");
-/*
-   $('#futureDisplay').html('');
-
-    for(let i = 7; i< weatherArray["list"].length; i+=9) {
-        console.log(weatherArray["list"][i]["weather"][0].id);
-        $('#futureDisplay').append(`
-            <div class="card col-md-3 col-sm-6 text-light text-center" style="background-color: #16223F">
-                <div class="card-body">
-                    <h4>${dayjs.unix(weatherArray["list"][i].dt).format("MM/D/YYYY")}</h4>
-                    ${pickIcon(weatherArray["list"][i]["weather"][0].id)}
-                    <ul class="list-unstyled fs-5">
-                        <li class="my-2">Temp: ${weatherArray["list"][i]["main"].temp}</li>
-                        <li class="my-2">Wind: ${weatherArray["list"][i]["wind"].speed} MPH</li>
-                        <li class="my-2">Humidity: ${weatherArray["list"][i]["main"].humidity}%</li>
-                    </ul>
-                </div> 
-            </div>
-        `);
-
-    }
-        */
 
 }
 
