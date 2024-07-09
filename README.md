@@ -7,7 +7,7 @@ I built this project as a means of practicing several important facets of fronte
 
 ## Usage
 
-To get started, go [here!](otekolste.github.io/weather-dashboard)
+To get started, go [here!](https://otekolste.github.io/weather-dashboard)
 
 Get started by inputting a city into the search bar and clicking 'Search.'
 
