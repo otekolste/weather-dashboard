@@ -175,7 +175,7 @@ function renderWeatherInfo() {
     for(let i = 0; i<5;i++) {
         console.log(getAverageTemp(breakpoint,breakpoint+8));
         $('#futureDisplay').append(`
-            <div class="card mx-1 col-md-2 col-sm-6 text-light text-center" style="background-color: #16223F">
+            <div class="card mx-1 col-lg-2 col-md-5 col-sm-10 text-light text-center" style="background-color: #16223F">
                 <div class="card-body">
                     <h4>${weatherArray[1]["list"][breakpoint].dt_txt.substring(0,11)}</h4>
                     ${pickIcon(weatherArray[1]["list"][i]["weather"][0].id)}
